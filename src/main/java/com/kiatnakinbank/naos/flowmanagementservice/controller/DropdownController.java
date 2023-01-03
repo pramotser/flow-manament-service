@@ -36,7 +36,11 @@ public class DropdownController {
             return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Missing or Invalid Required Field Header",
                     new ArrayList<>());
         }
-        List<DropdownResponse> dropdownList = this.dropdownService.getDropdownByType(request.getHeader(Constants.HeaderKey.DROPDOWN_TYPE));
+        LOGGER.info("Boolean.parseBoolean(request.getHeader(show_code)) :"+Boolean.parseBoolean(request.getHeader("show_code")));
+        LOGGER.info("request.getHeader(show_code) :"+request.getHeader("show_code"));
+        List<DropdownResponse> dropdownList = this.dropdownService
+                .getDropdownByType(request.getHeader(Constants.HeaderKey.DROPDOWN_TYPE),
+                        Boolean.parseBoolean(request.getHeader("show_code")));
         if (dropdownList.isEmpty()) {
             return Util.createResponse(Constants.ResponseCode.OK, "Data Not Found", new ArrayList<>());
         }

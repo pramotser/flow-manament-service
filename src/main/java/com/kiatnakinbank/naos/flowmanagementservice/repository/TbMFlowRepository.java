@@ -18,4 +18,6 @@ public interface TbMFlowRepository extends JpaRepository<TbmFlowEntity, Long> {
     long countByFlowId(Long flowId);
 
     List<TbmFlowEntity> findByFlowId(long flowId);
+
+    long countByFlowResultParam(String flowResultParam);
 }

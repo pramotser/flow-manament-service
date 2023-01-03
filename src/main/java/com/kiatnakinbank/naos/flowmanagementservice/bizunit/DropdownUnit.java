@@ -24,24 +24,28 @@ public class DropdownUnit {
     @Autowired
     private TbMResultParamRepository tbMResultParamRepository;
 
-    public List<DropdownResponse> getFlowList() {
+    public List<DropdownResponse> getFlowList(boolean showCode) {
         LOGGER.info("============ DropdownUnit getFlowList ============");
-        return this.mapTbMFlowToDropdownResponse(tbMFlowRepository.findAll());
+        return this.mapTbMFlowToDropdownResponse(tbMFlowRepository.findAll(), showCode);
     }
 
-    public List<DropdownResponse> getResultParamList() {
+    public List<DropdownResponse> getResultParamList(boolean showCode) {
         LOGGER.info("============ DropdownUnit getResultParamList ============");
         List<DropdownResponse> dropdownResponses = new ArrayList<>();
         for (TbMResultParamEntity row : this.tbMResultParamRepository.findAll()) {
-            dropdownResponses.add(new DropdownResponse(row.getResultParamCode(), row.getResultParamName(), row));
+            dropdownResponses.add(new DropdownResponse(row.getResultParamCode(),
+                    (showCode) ? row.getResultParamCode() + " : " + row.getResultParamName() : row.getResultParamName(),
+                    row));
         }
         return dropdownResponses;
     }
 
-    private List<DropdownResponse> mapTbMFlowToDropdownResponse(List<TbmFlowEntity> tbmFlowEntityList) {
+    private List<DropdownResponse> mapTbMFlowToDropdownResponse(List<TbmFlowEntity> tbmFlowEntityList,
+            boolean showCode) {
         List<DropdownResponse> dropdownResponses = new ArrayList<>();
         for (TbmFlowEntity row : tbmFlowEntityList) {
-            dropdownResponses.add(new DropdownResponse(row.getFlowName(), row.getFlowName(), row));
+            dropdownResponses.add(new DropdownResponse(row.getFlowName(),
+                    (showCode) ? row.getFlowId() + " : " + row.getFlowName() : row.getFlowName(), row));
         }
         return dropdownResponses;
     }

@@ -24,15 +24,15 @@ public class DropdownService {
     @Autowired
     private DropdownProperties dropdownTypeProperties;
 
-    public List<DropdownResponse> getDropdownByType(String dropdownType) {
+    public List<DropdownResponse> getDropdownByType(String dropdownType, boolean showCode) {
         LOGGER.info("============ DropdownService getDropdownByType ============");
         List<DropdownResponse> dropdownList = new ArrayList<DropdownResponse>();
         switch (dropdownType) {
             case Constants.DropdownType.FLOW_LIST:
-                dropdownList = dropdownUnit.getFlowList();
+                dropdownList = dropdownUnit.getFlowList(showCode);
                 break;
             case Constants.DropdownType.RESULT_PARAM_LIST:
-                dropdownList = dropdownUnit.getResultParamList();
+                dropdownList = dropdownUnit.getResultParamList(showCode);
                 break;
             default:
                 break;

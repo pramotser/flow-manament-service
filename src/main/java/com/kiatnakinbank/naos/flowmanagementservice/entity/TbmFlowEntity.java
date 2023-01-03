@@ -37,16 +37,4 @@ public class TbmFlowEntity extends BaseEntity {
     @Nationalized
     @Column(name = "DECISION_FLOW")
     private String decisionFlow;
-//    @Column(name = "IS_ACTIVE")
-//    private String isActive;
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "CREATE_DATE")
-//    private Date createDate;
-//    @Column(name = "CREATE_USER")
-//    private String createUser;
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "UPDATE_DATE")
-//    private Date updateDate;
-//    @Column(name = "UPDATE_USER")
-//    private String updateUser;
 }

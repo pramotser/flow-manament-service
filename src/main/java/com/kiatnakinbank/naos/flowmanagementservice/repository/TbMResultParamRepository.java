@@ -12,4 +12,7 @@ public interface TbMResultParamRepository extends JpaRepository<TbMResultParamEn
     List<TbMResultParamEntity> findByResultParamNameContainingIgnoreCase(String resultParam);
 
     long countByResultParamCode(String resultParamCode);
+
+    List<TbMResultParamEntity> findByResultParamCode(String resultParamCode);
+
 }

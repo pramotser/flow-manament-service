@@ -31,8 +31,10 @@ public class ResultParamService {
     }
 
     public ResponseEntity<Response> createResultParam(RequestCreateResultParam requestBody) {
+        LOGGER.info("============ ResultParamService createResultParam ============");
         if (this.resultParamUnit.duplicateResultParamCode(requestBody.getResultParamCode())) {
-            Util.createResponse(Constants.ResponseCode.CONFLICT, "Result Param Code is Duplicate.", new ArrayList<>());
+            return Util.createResponse(Constants.ResponseCode.CONFLICT, "Result Param Code is Duplicate.",
+                    new ArrayList<>());
         }
         TbMResultParamEntity tbMResultParamEntity = mapTbMResultParam(requestBody);
         tbMResultParamEntity.setCreateAttribute("SYSTEM");
@@ -40,6 +42,41 @@ public class ResultParamService {
 
         this.resultParamUnit.saveTbMResultParamEntity(tbMResultParamEntity);
         return Util.createResponse(Constants.ResponseCode.OK, "Create Result Param Success", new ArrayList<>());
+    }
+
+    public ResponseEntity<Response> deleteResultParam(String resultParamCode) {
+        LOGGER.info("============ ResultParamService deleteResultParam ============");
+        if (!this.resultParamUnit.duplicateResultParamCode(resultParamCode)) {
+            return Util.createResponse(Constants.ResponseCode.NOT_MODIFIED, "Result Param Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+        if (!this.resultParamUnit.checkResultParamInactive(resultParamCode)) {
+            return Util.createResponse(Constants.ResponseCode.ACCEPTED, "Resutl param must be inactive.",
+                    new ArrayList<>());
+        }
+        this.resultParamUnit.deleteResultParamByResultParamCode(resultParamCode);
+        return Util.createResponse(Constants.ResponseCode.OK, "Delete Result Param Success.", new ArrayList<>());
+    }
+
+    public ResponseEntity<Response> updateResultParam(RequestCreateResultParam requestBody) {
+        LOGGER.info("============ ResultParamService updateResultParam ============");
+        if (!this.resultParamUnit.duplicateResultParamCode(requestBody.getResultParamCode())) {
+            return Util.createResponse(Constants.ResponseCode.NOT_MODIFIED, "Result Param Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+        TbMResultParamEntity tbMResultParamEntity = resultParamUnit
+                .getTbMResultParamById(requestBody.getResultParamCode());
+        if (!tbMResultParamEntity.getIsActive().equals(requestBody.getIsActive())) {
+            if (this.resultParamUnit.checkResultParamUsing(requestBody.getResultParamCode())) {
+                return Util.createResponse(Constants.ResponseCode.ACCEPTED,
+                        "Result Param is currently in use, cannot be changed to Inactive.", new ArrayList<>());
+            }
+        }
+        tbMResultParamEntity.setResultParamName(requestBody.getResultParamName());
+        tbMResultParamEntity.setIsActive(requestBody.getIsActive());
+        tbMResultParamEntity.setUpdateAttribute("SYSTEM");
+        this.resultParamUnit.saveTbMResultParamEntity(tbMResultParamEntity);
+        return Util.createResponse(Constants.ResponseCode.OK, "Update Result Param Success", new ArrayList<>());
     }
 
     private TbMResultParamEntity mapTbMResultParam(RequestCreateResultParam requestCreateResultParam) {

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,23 @@ public class ResultParamController {
     @PostMapping(value = "/createResultParam")
     public ResponseEntity<Response> createResultParam(HttpServletRequest request,
             @RequestBody RequestCreateResultParam requestBody) {
+        LOGGER.info("============ ResultParamController createResultParam ============");
         return this.resultParamService.createResultParam(requestBody);
+    }
+
+    @PostMapping(value = "/updateResultParam")
+    public ResponseEntity<Response> updateResultParam(HttpServletRequest request,
+            @RequestBody RequestCreateResultParam requestBody) {
+
+                LOGGER.info("requestBody"+requestBody);
+        return this.resultParamService.updateResultParam(requestBody);
+    }
+
+    @DeleteMapping(value = "/deleteResultParam")
+    public ResponseEntity<Response> deleteResultParam(HttpServletRequest request,
+            @RequestBody RequestCreateResultParam requestBody) {               
+        LOGGER.info("============ ResultParamController deleteResultParam ============");
+        return this.resultParamService.deleteResultParam(requestBody.getResultParamCode());
     }
 
 }
