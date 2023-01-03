@@ -1,9 +1,14 @@
 package com.kiatnakinbank.naos.flowmanagementservice.dto;
 
-import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
-import lombok.*;
-
 import java.util.Date;
+
+import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 //@Data
 @NoArgsConstructor(access = AccessLevel.PUBLIC)

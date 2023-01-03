@@ -1,27 +1,39 @@
 package com.kiatnakinbank.naos.flowmanagementservice.bizunit;
 
-import com.kiatnakinbank.naos.flowmanagementservice.dto.DropdownResponse;
-import com.kiatnakinbank.naos.flowmanagementservice.entity.TbmFlowEntity;
-import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMFlowRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kiatnakinbank.naos.flowmanagementservice.dto.DropdownResponse;
+import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMResultParamEntity;
+import com.kiatnakinbank.naos.flowmanagementservice.entity.TbmFlowEntity;
+import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMFlowRepository;
+import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMResultParamRepository;
+
 @Service
 public class DropdownUnit {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DropdownUnit.class);
     @Autowired
     private TbMFlowRepository tbMFlowRepository;
 
+    @Autowired
+    private TbMResultParamRepository tbMResultParamRepository;
+
     public List<DropdownResponse> getFlowList() {
+        LOGGER.info("============ DropdownUnit getFlowList ============");
         return this.mapTbMFlowToDropdownResponse(tbMFlowRepository.findAll());
     }
 
     public List<DropdownResponse> getResultParamList() {
+        LOGGER.info("============ DropdownUnit getResultParamList ============");
         List<DropdownResponse> dropdownResponses = new ArrayList<>();
-        for (String row : this.tbMFlowRepository.findDistinctFlowResultParam()) {
-            dropdownResponses.add(new DropdownResponse(row, row, row));
+        for (TbMResultParamEntity row : this.tbMResultParamRepository.findAll()) {
+            dropdownResponses.add(new DropdownResponse(row.getResultParamCode(), row.getResultParamName(), row));
         }
         return dropdownResponses;
     }

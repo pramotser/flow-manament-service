@@ -1,5 +1,6 @@
 package com.kiatnakinbank.naos.flowmanagementservice.bizunit;
 
+import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.FlowDto;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbmFlowEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMFlowRepository;
@@ -20,8 +21,9 @@ public class FlowUnit {
     private TbMFlowRepository tbMFlowRepository;
 
     public List<FlowDto> getFlowListByCondition(String flowName) {
+        LOGGER.info("============ FlowUnit getFlowListByCondition ============");
         List<TbmFlowEntity> tbmFlowEntityList = new ArrayList<>();
-        if (flowName == null && flowName.length() == 0) {
+        if (flowName == null || flowName.isEmpty()) {
             tbmFlowEntityList = tbMFlowRepository.findAll();
         } else {
             tbmFlowEntityList = tbMFlowRepository.findByFlowNameContainingIgnoreCase(flowName);
@@ -44,15 +46,23 @@ public class FlowUnit {
         return flowDtoList;
     }
 
-    public Boolean checkDuplicateFlow (long flowId){
+    public Boolean checkDuplicateFlow(long flowId) {
         return tbMFlowRepository.countByFlowId(flowId) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public TbmFlowEntity saveFlow(TbmFlowEntity tbmFlowEntity) {
-       return tbMFlowRepository.save(tbmFlowEntity);
+        return tbMFlowRepository.save(tbmFlowEntity);
     }
 
-    public TbmFlowEntity getTbmFlowByFlowId (Long flowId){
+    public TbmFlowEntity getTbmFlowByFlowId(Long flowId) {
         return tbMFlowRepository.findByFlowId(flowId).get(0);
+    }
+
+    public Boolean checkFlowInactive(long flowId) {
+        return tbMFlowRepository.findByFlowId(flowId).get(0).getIsActive().equals(ActiveFlag.N);
+    }
+
+    public void deleteFlow(long flowId) {
+        tbMFlowRepository.deleteById(flowId);
     }
 }

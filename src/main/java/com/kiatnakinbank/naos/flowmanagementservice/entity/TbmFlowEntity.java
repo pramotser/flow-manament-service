@@ -1,10 +1,19 @@
 package com.kiatnakinbank.naos.flowmanagementservice.entity;
-import com.kiatnakinbank.naos.flowmanagementservice.entity.base.BaseEntity;
-import lombok.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.hibernate.annotations.Nationalized;
 
-import javax.persistence.*;
-import java.util.Date;
+import com.kiatnakinbank.naos.flowmanagementservice.entity.base.BaseEntity;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 @Data
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
