@@ -39,7 +39,6 @@ public class ResultParamService {
         TbMResultParamEntity tbMResultParamEntity = mapTbMResultParam(requestBody);
         tbMResultParamEntity.setCreateAttribute("SYSTEM");
         tbMResultParamEntity.setIsActive(requestBody.getIsActive());
-
         this.resultParamUnit.saveTbMResultParamEntity(tbMResultParamEntity);
         return Util.createResponse(Constants.ResponseCode.OK, "Create Result Param Success", new ArrayList<>());
     }

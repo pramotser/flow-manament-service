@@ -32,19 +32,21 @@ public class FlowService {
     public ResponseEntity<Response> createFlow(RequestCreateFlow requestCreateFlow) {
         LOGGER.info("============ FlowService createFlow ============");
         if (flowUnit.checkDuplicateFlow(requestCreateFlow.getFlowId())) {
-            return Util.createResponseByCode(Constants.ResponseCode.CONFLICT, new ArrayList<>());
+            return Util.createResponse(Constants.ResponseCode.CONFLICT, "FLow Id is Duplicate.",
+                    new ArrayList<>());
         }
         TbmFlowEntity tbmFlowEntity = mapTbMFlow(requestCreateFlow);
         tbmFlowEntity.setCreateAttribute("SYSTEM");
         tbmFlowEntity.setIsActive(requestCreateFlow.getIsActive());
-        return Util.createResponseByCode(Constants.ResponseCode.OK,
-                mapTbmFlowToFlowDto(flowUnit.saveFlow(tbmFlowEntity)));
+        flowUnit.saveFlow(tbmFlowEntity);
+        return Util.createResponse(Constants.ResponseCode.OK, "Create Flow Success", new ArrayList<>());
     }
 
     public ResponseEntity<Response> updateFlow(RequestCreateFlow requestCreateFlow) {
         LOGGER.info("============ FlowService updateFlow ============");
         if (!flowUnit.checkDuplicateFlow(requestCreateFlow.getFlowId())) {
-            return Util.createResponseByCode(Constants.ResponseCode.NOT_MODIFIED, new ArrayList<>());
+            return Util.createResponse(Constants.ResponseCode.NOT_MODIFIED, "Flow ID is Data Not Found.",
+                    new ArrayList<>());
         }
         TbmFlowEntity tbmFlowEntity = flowUnit.getTbmFlowByFlowId(requestCreateFlow.getFlowId());
         tbmFlowEntity.setFlowName(requestCreateFlow.getFlowName());
@@ -52,17 +54,22 @@ public class FlowService {
         tbmFlowEntity.setDecisionFlow(requestCreateFlow.getDecisionFlow());
         tbmFlowEntity.setIsActive(requestCreateFlow.getIsActive());
         tbmFlowEntity.setUpdateAttribute("SYSTEM");
-        return Util.createResponseByCode(Constants.ResponseCode.OK,
-                mapTbmFlowToFlowDto(flowUnit.saveFlow(tbmFlowEntity)));
+        flowUnit.saveFlow(tbmFlowEntity);
+        return Util.createResponse(Constants.ResponseCode.OK, "Update Flow Success", new ArrayList<>());
     }
 
     public ResponseEntity<Response> deleteFlow(RequestCreateFlow requestCreateFlow) {
         LOGGER.info("============ FlowService deleteFlow ============");
+        if (!flowUnit.checkDuplicateFlow(requestCreateFlow.getFlowId())) {
+            return Util.createResponse(Constants.ResponseCode.NOT_MODIFIED, "Flow ID is Data Not Found.",
+                    new ArrayList<>());
+        }
         if (!flowUnit.checkFlowInactive(requestCreateFlow.getFlowId())) {
-            return Util.createResponseByCode(Constants.ResponseCode.ACCEPTED, new ArrayList<>());
+            return Util.createResponse(Constants.ResponseCode.ACCEPTED, "Cannot delete because the status flow is active.",
+                    new ArrayList<>());
         }
         flowUnit.deleteFlow(requestCreateFlow.getFlowId());
-        return Util.createResponseByCode(Constants.ResponseCode.OK, new ArrayList<>());
+        return Util.createResponse(Constants.ResponseCode.OK, "Delete Flow Success.", new ArrayList<>());
     }
 
     private FlowDto mapTbmFlowToFlowDto(TbmFlowEntity tbmFlowEntity) {
