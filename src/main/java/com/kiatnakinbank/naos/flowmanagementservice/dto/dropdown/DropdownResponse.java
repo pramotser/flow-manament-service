@@ -1,4 +1,4 @@
-package com.kiatnakinbank.naos.flowmanagementservice.dto;
+package com.kiatnakinbank.naos.flowmanagementservice.dto.dropdown;
 
 import lombok.*;
 

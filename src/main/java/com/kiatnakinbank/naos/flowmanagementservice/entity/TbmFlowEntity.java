@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter(AccessLevel.PUBLIC)
 @Entity
 @Table(name = "TB_M_FLOW_TEMP")
-public class TbmFlowEntity extends BaseEntity {
+public class TbMFlowEntity extends BaseEntity {
 
     private static final long serialVersionUID = 820283650299533174L;
 

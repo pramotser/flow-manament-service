@@ -2,7 +2,7 @@ package com.kiatnakinbank.naos.flowmanagementservice.bizunit;
 
 import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.FlowDto;
-import com.kiatnakinbank.naos.flowmanagementservice.entity.TbmFlowEntity;
+import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMFlowRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,20 +20,20 @@ public class FlowUnit {
     @Autowired
     private TbMFlowRepository tbMFlowRepository;
 
-    public List<FlowDto> getFlowListByCondition(String flowName) {
-        LOGGER.info("============ FlowUnit getFlowListByCondition ============");
-        List<TbmFlowEntity> tbmFlowEntityList = new ArrayList<>();
-        if (flowName == null || flowName.isEmpty()) {
+    public List<FlowDto> getFlowListByFlowId(String flowId) {
+        LOGGER.info("============ FlowUnit getFlowListByFlowId ============");
+        List<TbMFlowEntity> tbmFlowEntityList = new ArrayList<>();
+        if (flowId == null || flowId.isEmpty()) {
             tbmFlowEntityList = tbMFlowRepository.findAll();
         } else {
-            tbmFlowEntityList = tbMFlowRepository.findByFlowNameContainingIgnoreCase(flowName);
+            tbmFlowEntityList = tbMFlowRepository.findByFlowId(Long.valueOf(flowId));
         }
         return this.mapTbMFlowToFlowDto(tbmFlowEntityList);
     }
 
-    private List<FlowDto> mapTbMFlowToFlowDto(List<TbmFlowEntity> tbmFlowEntityList) {
+    private List<FlowDto> mapTbMFlowToFlowDto(List<TbMFlowEntity> tbmFlowEntityList) {
         List<FlowDto> flowDtoList = new ArrayList<>();
-        for (TbmFlowEntity row : tbmFlowEntityList) {
+        for (TbMFlowEntity row : tbmFlowEntityList) {
             FlowDto flowDto = new FlowDto();
             flowDto.setFlowId(row.getFlowId());
             flowDto.setFlowName(row.getFlowName());
@@ -50,11 +50,11 @@ public class FlowUnit {
         return tbMFlowRepository.countByFlowId(flowId) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public TbmFlowEntity saveFlow(TbmFlowEntity tbmFlowEntity) {
+    public TbMFlowEntity saveFlow(TbMFlowEntity tbmFlowEntity) {
         return tbMFlowRepository.save(tbmFlowEntity);
     }
 
-    public TbmFlowEntity getTbmFlowByFlowId(Long flowId) {
+    public TbMFlowEntity getTbmFlowByFlowId(Long flowId) {
         return tbMFlowRepository.findByFlowId(flowId).get(0);
     }
 

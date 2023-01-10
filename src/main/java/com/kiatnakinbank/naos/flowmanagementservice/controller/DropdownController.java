@@ -10,13 +10,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
-import com.kiatnakinbank.naos.flowmanagementservice.dto.DropdownResponse;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.dropdown.DropdownResponse;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.dropdown.DropdownRequest;
 import com.kiatnakinbank.naos.flowmanagementservice.service.DropdownService;
 import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 
@@ -29,18 +31,15 @@ public class DropdownController {
     @Autowired
     private DropdownService dropdownService;
 
-    @GetMapping(value = "/getList")
-    public ResponseEntity<Response> getDropdownList(HttpServletRequest request) {
-        LOGGER.info("============ DropdownController getList ============");
-        if (!this.dropdownService.validateHeaderDropdown(request)) {
+    @PostMapping(value = "/getListByCondition")
+    public ResponseEntity<Response> getDropdownList(HttpServletRequest request,
+            @RequestBody DropdownRequest requestBody) {
+        LOGGER.info("============ DropdownController getListByCondition ============");
+        if (!this.dropdownService.validateDropdownType(requestBody)) {
             return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Missing or Invalid Required Field Header",
                     new ArrayList<>());
         }
-        LOGGER.info("Boolean.parseBoolean(request.getHeader(show_code)) :"+Boolean.parseBoolean(request.getHeader("show_code")));
-        LOGGER.info("request.getHeader(show_code) :"+request.getHeader("show_code"));
-        List<DropdownResponse> dropdownList = this.dropdownService
-                .getDropdownByType(request.getHeader(Constants.HeaderKey.DROPDOWN_TYPE),
-                        Boolean.parseBoolean(request.getHeader("show_code")));
+        List<DropdownResponse> dropdownList = this.dropdownService.getDropdownListByType(requestBody);
         if (dropdownList.isEmpty()) {
             return Util.createResponse(Constants.ResponseCode.OK, "Data Not Found", new ArrayList<>());
         }

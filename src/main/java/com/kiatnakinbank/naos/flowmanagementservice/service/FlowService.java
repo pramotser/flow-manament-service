@@ -14,7 +14,7 @@ import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.FlowDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.RequestCreateFlow;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
-import com.kiatnakinbank.naos.flowmanagementservice.entity.TbmFlowEntity;
+import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 
 @Service
@@ -24,9 +24,9 @@ public class FlowService {
     @Autowired
     private FlowUnit flowUnit;
 
-    public List<FlowDto> getFlowListByCondition(String flowName) {
-        LOGGER.info("============ FlowService getFlowListByCondition ============");
-        return this.flowUnit.getFlowListByCondition(flowName);
+    public List<FlowDto> getFlowListByFlowId(String flowId) {
+        LOGGER.info("============ FlowService getFlowListByFlowId ============");
+        return this.flowUnit.getFlowListByFlowId(flowId);
     }
 
     public ResponseEntity<Response> createFlow(RequestCreateFlow requestCreateFlow) {
@@ -35,7 +35,7 @@ public class FlowService {
             return Util.createResponse(Constants.ResponseCode.CONFLICT, "FLow Id is Duplicate.",
                     new ArrayList<>());
         }
-        TbmFlowEntity tbmFlowEntity = mapTbMFlow(requestCreateFlow);
+        TbMFlowEntity tbmFlowEntity = mapTbMFlow(requestCreateFlow);
         tbmFlowEntity.setCreateAttribute("SYSTEM");
         tbmFlowEntity.setIsActive(requestCreateFlow.getIsActive());
         flowUnit.saveFlow(tbmFlowEntity);
@@ -48,7 +48,7 @@ public class FlowService {
             return Util.createResponse(Constants.ResponseCode.NOT_MODIFIED, "Flow ID is Data Not Found.",
                     new ArrayList<>());
         }
-        TbmFlowEntity tbmFlowEntity = flowUnit.getTbmFlowByFlowId(requestCreateFlow.getFlowId());
+        TbMFlowEntity tbmFlowEntity = flowUnit.getTbmFlowByFlowId(requestCreateFlow.getFlowId());
         tbmFlowEntity.setFlowName(requestCreateFlow.getFlowName());
         tbmFlowEntity.setFlowResultParam(requestCreateFlow.getResultParam());
         tbmFlowEntity.setDecisionFlow(requestCreateFlow.getDecisionFlow());
@@ -72,15 +72,15 @@ public class FlowService {
         return Util.createResponse(Constants.ResponseCode.OK, "Delete Flow Success.", new ArrayList<>());
     }
 
-    private FlowDto mapTbmFlowToFlowDto(TbmFlowEntity tbmFlowEntity) {
+    private FlowDto mapTbmFlowToFlowDto(TbMFlowEntity tbmFlowEntity) {
         return new FlowDto(tbmFlowEntity.getFlowId(), tbmFlowEntity.getFlowName(), tbmFlowEntity.getFlowResultParam(),
                 tbmFlowEntity.getStartFlowId(), tbmFlowEntity.getDecisionFlow(), tbmFlowEntity.getIsActive(),
                 tbmFlowEntity.getCreateDate(), tbmFlowEntity.getCreateUser(), tbmFlowEntity.getUpdateDate(),
                 tbmFlowEntity.getUpdateUser());
     }
 
-    public TbmFlowEntity mapTbMFlow(RequestCreateFlow requestCreateFlow) {
-        return new TbmFlowEntity(requestCreateFlow.getFlowId(), requestCreateFlow.getFlowName(),
+    public TbMFlowEntity mapTbMFlow(RequestCreateFlow requestCreateFlow) {
+        return new TbMFlowEntity(requestCreateFlow.getFlowId(), requestCreateFlow.getFlowName(),
                 requestCreateFlow.getResultParam(), null, requestCreateFlow.getDecisionFlow());
     }
 }

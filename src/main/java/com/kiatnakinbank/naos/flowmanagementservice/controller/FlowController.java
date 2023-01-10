@@ -34,7 +34,7 @@ public class FlowController {
     public ResponseEntity<Response> getFlowListByCondition(HttpServletRequest request,
             @RequestBody Map<String, String> requestBody) {
         LOGGER.info("============ FlowController getFlowListByCondition ============");
-        List<FlowDto> flowDtoList = this.flowService.getFlowListByCondition(requestBody.get("flowName"));
+        List<FlowDto> flowDtoList = this.flowService.getFlowListByFlowId(requestBody.get("flowId"));
         return ResponseEntity.status(HttpStatus.OK).body(new Response(HttpStatus.OK, "Success", flowDtoList));
     }
 

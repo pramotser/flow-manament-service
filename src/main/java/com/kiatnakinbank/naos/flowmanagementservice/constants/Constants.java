@@ -1,13 +1,11 @@
 package com.kiatnakinbank.naos.flowmanagementservice.constants;
 
 public class Constants {
-    public static final class HeaderKey {
-        public static final String DROPDOWN_TYPE = "dropdown_type";
-    }
-
     public static final class DropdownType {
         public static final String FLOW_LIST = "FLOW_LIST";
         public static final String RESULT_PARAM_LIST = "RESULT_PARAM_LIST";
+        public static final String UNIVERSAL_FIELD_LIST = "UNIVERSAL_FIELD_LIST";
+        // public static final String RESULT_SUBFLOW_LIST = "RESULT_SUBFLOW_LIST";
     }
 
     public static final class HttpMethod {

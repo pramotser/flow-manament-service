@@ -15,4 +15,5 @@ public interface TbMResultParamRepository extends JpaRepository<TbMResultParamEn
 
     List<TbMResultParamEntity> findByResultParamCode(String resultParamCode);
 
+    List<TbMResultParamEntity> findAllByOrderByResultParamCodeAsc();
 }
