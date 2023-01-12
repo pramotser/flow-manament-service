@@ -18,6 +18,7 @@ public class ResultParamDto {
 
     private String resultParamCode;
     private String resultParamName;
+    private String resultParamType;
     private ActiveFlag isActive;
     private Date createDate;
     private String createUser;

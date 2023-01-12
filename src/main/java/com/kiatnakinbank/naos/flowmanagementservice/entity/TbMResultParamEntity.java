@@ -25,4 +25,6 @@ public class TbMResultParamEntity extends BaseEntity {
     private String resultParamCode;
     @Column(name = "RESULT_PARAM_NAME")
     private String resultParamName;
+    @Column(name = "RESULT_PARAM_TYPE")
+    private String resultParamType;
 }

@@ -54,6 +54,7 @@ public class ResultParamUnit {
             ResultParamDto resultParamDto = new ResultParamDto();
             resultParamDto.setResultParamCode(row.getResultParamCode());
             resultParamDto.setResultParamName(row.getResultParamName());
+            resultParamDto.setResultParamType(row.getResultParamType());
             resultParamDto.setIsActive(row.getIsActive());
             resultParamDto.setCreateDate(row.getCreateDate());
             resultParamDto.setCreateUser(row.getCreateUser());

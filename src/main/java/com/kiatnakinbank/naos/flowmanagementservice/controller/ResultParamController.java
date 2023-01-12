@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.RequestCreateResultParam;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.ResultParamDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
 import com.kiatnakinbank.naos.flowmanagementservice.service.ResultParamService;
+import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 
 @RestController
 @RequestMapping("/resultParam")
@@ -41,6 +43,7 @@ public class ResultParamController {
     @PostMapping(value = "/createResultParam")
     public ResponseEntity<Response> createResultParam(HttpServletRequest request,
             @RequestBody RequestCreateResultParam requestBody) {
+        LOGGER.info("requestBody : " + requestBody);
         LOGGER.info("============ ResultParamController createResultParam ============");
         return this.resultParamService.createResultParam(requestBody);
     }
@@ -49,15 +52,20 @@ public class ResultParamController {
     public ResponseEntity<Response> updateResultParam(HttpServletRequest request,
             @RequestBody RequestCreateResultParam requestBody) {
 
-                LOGGER.info("requestBody"+requestBody);
+        LOGGER.info("requestBody" + requestBody);
         return this.resultParamService.updateResultParam(requestBody);
     }
 
     @DeleteMapping(value = "/deleteResultParam")
     public ResponseEntity<Response> deleteResultParam(HttpServletRequest request,
-            @RequestBody RequestCreateResultParam requestBody) {               
+            @RequestBody RequestCreateResultParam requestBody) {
         LOGGER.info("============ ResultParamController deleteResultParam ============");
         return this.resultParamService.deleteResultParam(requestBody.getResultParamCode());
     }
 
+    @PostMapping(value = "/getResultParamByFlowId")
+    public ResponseEntity<Response> getResultParamByFlowId(HttpServletRequest request,
+            @RequestBody Map<String, String> requestBody) {
+        return this.resultParamService.getResulltParamByFlowId(requestBody.get("flowId"));
+    }
 }

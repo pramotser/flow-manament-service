@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface TbMFlowRepository extends JpaRepository<TbMFlowEntity, Long> {
     List<TbMFlowEntity> findByFlowNameContainingIgnoreCase(String flowName);
-    
+
     @Query(value = " SELECT DISTINCT RESULT_PARAM as FlowResultParam " +
             " FROM TB_M_FLOW_TEMP", nativeQuery = true)
     List<String> findDistinctFlowResultParam();
@@ -21,6 +21,9 @@ public interface TbMFlowRepository extends JpaRepository<TbMFlowEntity, Long> {
 
     long countByFlowResultParam(String flowResultParam);
 
-
     List<TbMFlowEntity> findAllByOrderByFlowIdAsc();
+
+    @Query(value = " SELECT RESULT_PARAM as FlowResultParam " +
+            " FROM TB_M_FLOW_TEMP WHERE FLOW_ID= :flowId ", nativeQuery = true)
+    List<String> findResultParamByFlowId(long flowId);
 }

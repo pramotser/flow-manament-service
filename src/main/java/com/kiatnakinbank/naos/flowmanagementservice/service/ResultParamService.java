@@ -3,19 +3,19 @@ package com.kiatnakinbank.naos.flowmanagementservice.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.kiatnakinbank.naos.flowmanagementservice.bizunit.FlowUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.bizunit.ResultParamUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.RequestCreateResultParam;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.ResultParamDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.dropdown.DropdownResponse;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMResultParamEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 
@@ -24,6 +24,8 @@ public class ResultParamService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultParamService.class);
     @Autowired
     private ResultParamUnit resultParamUnit;
+    @Autowired
+    private FlowUnit flowUnit;
 
     public List<ResultParamDto> getResultParamListByCondition(String resultParamName) {
         LOGGER.info("============ ResultParamService getResultParamListByCondition ============");
@@ -65,13 +67,20 @@ public class ResultParamService {
         }
         TbMResultParamEntity tbMResultParamEntity = resultParamUnit
                 .getTbMResultParamById(requestBody.getResultParamCode());
-        if (!tbMResultParamEntity.getIsActive().equals(requestBody.getIsActive())) {
-            if (this.resultParamUnit.checkResultParamUsing(requestBody.getResultParamCode())) {
+        if (this.resultParamUnit.checkResultParamUsing(requestBody.getResultParamCode())) {
+            if (!tbMResultParamEntity.getIsActive().equals(requestBody.getIsActive())) {
                 return Util.createResponse(Constants.ResponseCode.ACCEPTED,
                         "Result Param is currently in use, cannot be changed to Inactive.", new ArrayList<>());
             }
+            // if
+            // (!requestBody.getResultParamType().equalsIgnoreCase(tbMResultParamEntity.getResultParamType())){
+            // return Util.createResponse(Constants.ResponseCode.ACCEPTED,
+            // "Result Param is currently in use, cannot be changed to Result Param Type.",
+            // new ArrayList<>());
+            // }
         }
         tbMResultParamEntity.setResultParamName(requestBody.getResultParamName());
+        tbMResultParamEntity.setResultParamType(requestBody.getResultParamType());
         tbMResultParamEntity.setIsActive(requestBody.getIsActive());
         tbMResultParamEntity.setUpdateAttribute("SYSTEM");
         this.resultParamUnit.saveTbMResultParamEntity(tbMResultParamEntity);
@@ -80,6 +89,18 @@ public class ResultParamService {
 
     private TbMResultParamEntity mapTbMResultParam(RequestCreateResultParam requestCreateResultParam) {
         return new TbMResultParamEntity(requestCreateResultParam.getResultParamCode(),
-                requestCreateResultParam.getResultParamName());
+                requestCreateResultParam.getResultParamName(),
+                requestCreateResultParam.getResultParamType());
+    }
+
+    public ResponseEntity<Response> getResulltParamByFlowId(String flowId) {
+        LOGGER.info("============ ResultParamService getResulltParamByFlowId ============");
+        String resultParam = flowUnit.getResultParamCodeByFLowId(flowId);
+        return Util.createResponse(Constants.ResponseCode.OK, "Success", this.mapTbMResultParamEntityToDropdownResponse(this.resultParamUnit.getTbMResultParamById(resultParam)));
+    }
+
+    private DropdownResponse mapTbMResultParamEntityToDropdownResponse(TbMResultParamEntity tbMResultParamEntity) {
+        return new DropdownResponse(tbMResultParamEntity.getResultParamCode(),
+                tbMResultParamEntity.getResultParamName(), tbMResultParamEntity);
     }
 }

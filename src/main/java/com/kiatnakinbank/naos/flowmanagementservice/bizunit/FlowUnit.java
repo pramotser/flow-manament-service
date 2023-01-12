@@ -65,4 +65,8 @@ public class FlowUnit {
     public void deleteFlow(long flowId) {
         tbMFlowRepository.deleteById(flowId);
     }
+
+    public String getResultParamCodeByFLowId(String flowId) {
+        return tbMFlowRepository.findResultParamByFlowId(Long.valueOf(flowId)).get(0);
+    }
 }
