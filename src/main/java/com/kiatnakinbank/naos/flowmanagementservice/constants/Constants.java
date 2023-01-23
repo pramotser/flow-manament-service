@@ -2,7 +2,7 @@ package com.kiatnakinbank.naos.flowmanagementservice.constants;
 
 public class Constants {
     public static final class DropdownType {
-        public static final String FLOW_LIST = "FLOW_LIST";
+        public static final String SUBFLOW_LIST = "SUBFLOW_LIST";
         public static final String RESULT_PARAM_LIST = "RESULT_PARAM_LIST";
         public static final String UNIVERSAL_FIELD_LIST = "UNIVERSAL_FIELD_LIST";
         public static final String RESULT_DECISION_LIST = "RESULT_DECISION_LIST";

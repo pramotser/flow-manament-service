@@ -26,9 +26,6 @@ public class UniversalService {
     @Autowired
     private UniversalUnit universalUnit;
 
-    // @Autowired
-    // private FlowUnit flowUnit;
-
     @Autowired
     private DecisionUnit decisionUnit;
 
@@ -102,7 +99,7 @@ public class UniversalService {
     }
 
     public ResponseEntity<Response> getDecisionResultByDecisionCode(String decisionCode) {
-        LOGGER.info("============ UniversalService getResulltParamByFlowId ============");
+        LOGGER.info("============ UniversalService getDecisionResultByDecisionCode ============");
         String decisionResult = this.decisionUnit.getDecisionResultByDecisionCode(decisionCode);
         return Util.createResponse(Constants.ResponseCode.OK, "Success", this
                 .mapTbMUniversalFieldToDropdownResponse(this.universalUnit.getTbMUniversalFieldById(decisionResult)));

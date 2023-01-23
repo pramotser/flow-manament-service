@@ -25,17 +25,16 @@ public class DropdownService {
         LOGGER.info("============ DropdownService getDropdownListByType ============");
         List<DropdownResponse> dropdownList = new ArrayList<DropdownResponse>();
         switch (requestBody.getDropdownType()) {
-            case Constants.DropdownType.FLOW_LIST:
-                dropdownList = dropdownUnit.getFlowList(requestBody.getFlagShowCode());
-                break;
-            case Constants.DropdownType.RESULT_PARAM_LIST:
-                dropdownList = dropdownUnit.getResultParamList(requestBody.getFlagShowCode());
+            case Constants.DropdownType.SUBFLOW_LIST:
+                dropdownList = dropdownUnit.getSubFlowList(requestBody.getFlagShowCode());
                 break;
             case Constants.DropdownType.UNIVERSAL_FIELD_LIST:
-                dropdownList = dropdownUnit.getUniversalFieldList(requestBody.getFlagShowCode(),Constants.UniversalType.UNIVERSAL);
+                dropdownList = dropdownUnit.getUniversalFieldList(requestBody.getFlagShowCode(),
+                        Constants.UniversalType.UNIVERSAL);
                 break;
             case Constants.DropdownType.RESULT_DECISION_LIST:
-                dropdownList = dropdownUnit.getUniversalFieldList(requestBody.getFlagShowCode(),Constants.UniversalType.RESULT_DECISION);
+                dropdownList = dropdownUnit.getUniversalFieldList(requestBody.getFlagShowCode(),
+                        Constants.UniversalType.RESULT_DECISION);
                 break;
             default:
                 break;
@@ -48,8 +47,8 @@ public class DropdownService {
         if (requestBody.getDropdownType() == null || requestBody.getDropdownType().isEmpty()) {
             return false;
         }
-        if (!Arrays.asList(Constants.DropdownType.RESULT_DECISION_LIST, Constants.DropdownType.UNIVERSAL_FIELD_LIST)
-                .contains(requestBody.getDropdownType())) {
+        List<String> dropdownType = Arrays.asList(Constants.DropdownType.RESULT_DECISION_LIST, Constants.DropdownType.UNIVERSAL_FIELD_LIST, Constants.DropdownType.SUBFLOW_LIST);
+        if (!dropdownType.contains(requestBody.getDropdownType())) {
             return false;
         }
         return true;

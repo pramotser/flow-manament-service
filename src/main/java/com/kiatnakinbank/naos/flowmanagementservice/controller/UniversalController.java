@@ -62,6 +62,6 @@ public class UniversalController {
     @PostMapping(value = "/getDecisionResultByDecisionCode")
     public ResponseEntity<Response> getDecisionResultByDecisionCode(HttpServletRequest request,
             @RequestBody Map<String, String> requestBody) {
-        return this.universalService.getDecisionResultByDecisionCode(requestBody.get("universalCode"));
+        return this.universalService.getDecisionResultByDecisionCode(requestBody.get("decisionCode"));
     }
 }
