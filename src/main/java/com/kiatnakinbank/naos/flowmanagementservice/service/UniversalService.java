@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import com.kiatnakinbank.naos.flowmanagementservice.bizunit.DecisionUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.bizunit.UniversalUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
-import com.kiatnakinbank.naos.flowmanagementservice.dto.UniversalFieldDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.dropdown.DropdownResponse;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.universalField.RequestCreateUniversalField;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.universalField.UniversalFieldDto;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMUniversalFieldNewEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 

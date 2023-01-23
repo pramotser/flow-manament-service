@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
-import com.kiatnakinbank.naos.flowmanagementservice.dto.UniversalFieldDto;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.universalField.UniversalFieldDto;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMUniversalFieldNewEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMDecisionRepository;
 import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMUniversalFieldNewRepository;

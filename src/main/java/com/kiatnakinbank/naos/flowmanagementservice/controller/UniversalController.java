@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kiatnakinbank.naos.flowmanagementservice.dto.UniversalFieldDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.universalField.RequestCreateUniversalField;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.universalField.UniversalFieldDto;
 import com.kiatnakinbank.naos.flowmanagementservice.service.UniversalService;
 
 @RestController

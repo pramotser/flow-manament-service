@@ -1,4 +1,5 @@
-package com.kiatnakinbank.naos.flowmanagementservice.dto;
+package com.kiatnakinbank.naos.flowmanagementservice.dto.universalField;
+
 
 import java.util.Date;
 
@@ -14,11 +15,11 @@ import lombok.Setter;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
-public class ResultParamDto {
-
-    private String resultParamCode;
-    private String resultParamName;
-    private String resultParamType;
+public class UniversalFieldDto {
+    private String universalCode;
+    private String universalName;
+    private String universalType;
+    private String fieldType;
     private ActiveFlag isActive;
     private Date createDate;
     private String createUser;
