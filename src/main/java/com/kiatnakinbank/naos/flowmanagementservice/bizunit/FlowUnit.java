@@ -113,6 +113,7 @@ public class FlowUnit {
             flowDto.setFlowDecisionCode(row.getFlowDecisionCode());
             flowDto.setFlowEffectiveDate(row.getFlowEffectiveDate());
             flowDto.setFlowExpirationDate(row.getFlowExpirationDate());
+            flowDto.setFlowJson(row.getFlowJson());
             flowDto.setIsActive(row.getIsActive());
             flowDto.setCreateDate(row.getCreateDate());
             flowDto.setCreateUser(row.getCreateUser());
@@ -121,5 +122,13 @@ public class FlowUnit {
             flowDtoList.add(flowDto);
         }
         return flowDtoList;
+    }
+
+    public boolean checkFlowCodeIsNotNull(String flowCode) {
+        return this.tbMFlowNewRepository.countByFlowCode(flowCode) > 0 ;
+    }
+
+    public TbMFlowNewEntity getTbMFlowNewByFlowCode(String flowCode) {
+        return this.tbMFlowNewRepository.findByFlowCode(flowCode).get(0);
     }
 }

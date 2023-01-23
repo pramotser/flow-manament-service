@@ -20,6 +20,7 @@ public class FlowListDto {
     private String flowDecisionCode;
     private Date flowEffectiveDate;
     private Date flowExpirationDate;
+    private String flowJson;    
     private ActiveFlag isActive;
     private Date createDate;
     private String createUser;

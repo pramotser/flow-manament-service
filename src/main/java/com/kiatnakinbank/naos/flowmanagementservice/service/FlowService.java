@@ -17,6 +17,7 @@ import com.kiatnakinbank.naos.flowmanagementservice.dto.RequestCreateFlow;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.FlowListDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.ReqFlowDto;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.ReqSaveFlowGraph;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowNewEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
@@ -113,5 +114,18 @@ public class FlowService {
 
     public List<FlowListDto> getFlowListByDecisionCode(String flowDecisionCode) {
         return this.flowUnit.getFlowListByDecisionCode(flowDecisionCode);
+    }
+
+    public ResponseEntity<Response> saveFlowGraph(ReqSaveFlowGraph requestBody) {
+        if (!this.flowUnit.checkFlowCodeIsNotNull(requestBody.getFlowCode())) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Flow Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+
+        TbMFlowNewEntity tbMFlowNewEntity = this.flowUnit.getTbMFlowNewByFlowCode(requestBody.getFlowCode());
+        tbMFlowNewEntity.setFlowJson(requestBody.getFlowJson());
+        tbMFlowNewEntity.setUpdateAttribute("SYSTEM");
+        flowUnit.saveFlow(tbMFlowNewEntity);
+        return Util.createResponse(Constants.ResponseCode.OK, "Save Flow Graph Success", new ArrayList<>());
     }
 }

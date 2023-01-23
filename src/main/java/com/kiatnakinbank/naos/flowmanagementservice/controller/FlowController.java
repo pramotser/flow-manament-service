@@ -22,6 +22,7 @@ import com.kiatnakinbank.naos.flowmanagementservice.dto.RequestCreateFlow;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.FlowListDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.ReqFlowDto;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.ReqSaveFlowGraph;
 import com.kiatnakinbank.naos.flowmanagementservice.service.FlowService;
 import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 
@@ -71,6 +72,12 @@ public class FlowController {
             @RequestBody Map<String, String> requestBody) {
         List<FlowListDto> flowDtoList = this.flowService.getFlowListByDecisionCode(requestBody.get("flowDecisionCode"));
         return ResponseEntity.status(HttpStatus.OK).body(new Response(HttpStatus.OK, "Success", flowDtoList));
+    }
+
+    @PostMapping(value = "/saveFlowGraph")
+    public ResponseEntity<Response> saveFlowGraph(@RequestHeader Map<String, String> headers,
+            @RequestBody ReqSaveFlowGraph requestBody) {
+        return this.flowService.saveFlowGraph(requestBody);
     }
 
 }
