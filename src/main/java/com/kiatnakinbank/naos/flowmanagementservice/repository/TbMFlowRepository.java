@@ -9,21 +9,21 @@ import java.util.List;
 
 @Repository
 public interface TbMFlowRepository extends JpaRepository<TbMFlowEntity, Long> {
-    List<TbMFlowEntity> findByFlowNameContainingIgnoreCase(String flowName);
+        List<TbMFlowEntity> findByFlowNameContainingIgnoreCase(String flowName);
 
-    @Query(value = " SELECT DISTINCT RESULT_PARAM as FlowResultParam " +
-            " FROM TB_M_FLOW_TEMP", nativeQuery = true)
-    List<String> findDistinctFlowResultParam();
+        @Query(value = " SELECT DISTINCT RESULT_PARAM as FlowResultParam " +
+                        " FROM TB_M_FLOW_TEMP", nativeQuery = true)
+        List<String> findDistinctFlowResultParam();
 
-    long countByFlowId(Long flowId);
+        long countByFlowId(Long flowId);
 
-    List<TbMFlowEntity> findByFlowId(long flowId);
+        List<TbMFlowEntity> findByFlowId(long flowId);
 
-    long countByFlowResultParam(String flowResultParam);
+        long countByFlowResultParam(String flowResultParam);
 
-    List<TbMFlowEntity> findAllByOrderByFlowIdAsc();
+        List<TbMFlowEntity> findAllByOrderByFlowIdAsc();
 
-    @Query(value = " SELECT RESULT_PARAM as FlowResultParam " +
-            " FROM TB_M_FLOW_TEMP WHERE FLOW_ID= :flowId ", nativeQuery = true)
-    List<String> findResultParamByFlowId(long flowId);
+        @Query(value = " SELECT RESULT_PARAM as FlowResultParam " +
+                        " FROM TB_M_FLOW_TEMP WHERE FLOW_ID= :flowId ", nativeQuery = true)
+        List<String> findResultParamByFlowId(long flowId);
 }

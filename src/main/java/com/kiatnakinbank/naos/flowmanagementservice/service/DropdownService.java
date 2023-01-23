@@ -1,9 +1,8 @@
 package com.kiatnakinbank.naos.flowmanagementservice.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ import com.kiatnakinbank.naos.flowmanagementservice.bizunit.DropdownUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.dropdown.DropdownRequest;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.dropdown.DropdownResponse;
-import com.kiatnakinbank.naos.flowmanagementservice.properties.DropdownProperties;
 
 @Service
 public class DropdownService {
@@ -22,8 +20,6 @@ public class DropdownService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DropdownService.class);
     @Autowired
     private DropdownUnit dropdownUnit;
-    @Autowired
-    private DropdownProperties dropdownTypeProperties;
 
     public List<DropdownResponse> getDropdownListByType(DropdownRequest requestBody) {
         LOGGER.info("============ DropdownService getDropdownListByType ============");
@@ -36,11 +32,11 @@ public class DropdownService {
                 dropdownList = dropdownUnit.getResultParamList(requestBody.getFlagShowCode());
                 break;
             case Constants.DropdownType.UNIVERSAL_FIELD_LIST:
-                dropdownList = dropdownUnit.getUniversalFieldList(requestBody.getFlagShowCode());
+                dropdownList = dropdownUnit.getUniversalFieldList(requestBody.getFlagShowCode(),Constants.UniversalType.UNIVERSAL);
                 break;
-            // case Constants.DropdownType.RESULT_SUBFLOW_LIST:
-            //     dropdownList = dropdownUnit.getResultSubFlowList(requestBody.getFlagShowCode());
-            //     break;
+            case Constants.DropdownType.RESULT_DECISION_LIST:
+                dropdownList = dropdownUnit.getUniversalFieldList(requestBody.getFlagShowCode(),Constants.UniversalType.RESULT_DECISION);
+                break;
             default:
                 break;
         }
@@ -52,7 +48,8 @@ public class DropdownService {
         if (requestBody.getDropdownType() == null || requestBody.getDropdownType().isEmpty()) {
             return false;
         }
-        if (dropdownTypeProperties.getTypeList().get(requestBody.getDropdownType()) == null) {
+        if (!Arrays.asList(Constants.DropdownType.RESULT_DECISION_LIST, Constants.DropdownType.UNIVERSAL_FIELD_LIST)
+                .contains(requestBody.getDropdownType())) {
             return false;
         }
         return true;

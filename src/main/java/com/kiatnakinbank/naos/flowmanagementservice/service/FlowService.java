@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.kiatnakinbank.naos.flowmanagementservice.bizunit.DecisionUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.bizunit.FlowUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.FlowDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.RequestCreateFlow;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.FlowListDto;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.ReqFlowDto;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowEntity;
+import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowNewEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 
 @Service
@@ -23,6 +27,9 @@ public class FlowService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FlowService.class);
     @Autowired
     private FlowUnit flowUnit;
+
+    @Autowired
+    private DecisionUnit decisionUnit;
 
     public List<FlowDto> getFlowListByFlowId(String flowId) {
         LOGGER.info("============ FlowService getFlowListByFlowId ============");
@@ -65,7 +72,8 @@ public class FlowService {
                     new ArrayList<>());
         }
         if (!flowUnit.checkFlowInactive(requestCreateFlow.getFlowId())) {
-            return Util.createResponse(Constants.ResponseCode.ACCEPTED, "Cannot delete because the status flow is active.",
+            return Util.createResponse(Constants.ResponseCode.ACCEPTED,
+                    "Cannot delete because the status flow is active.",
                     new ArrayList<>());
         }
         flowUnit.deleteFlow(requestCreateFlow.getFlowId());
@@ -82,5 +90,28 @@ public class FlowService {
     public TbMFlowEntity mapTbMFlow(RequestCreateFlow requestCreateFlow) {
         return new TbMFlowEntity(requestCreateFlow.getFlowId(), requestCreateFlow.getFlowName(),
                 requestCreateFlow.getResultParam(), null, requestCreateFlow.getDecisionFlow());
+    }
+
+    /// ----------------------- New -----------------------
+
+    public ResponseEntity<Response> addFlow(ReqFlowDto requestBody) {
+        if (!this.decisionUnit.checkDecisionCodeIsNotNull(requestBody.getFlowDecisionCode())) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Decision Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+        String flowCode = this.flowUnit.generateFlowCodeByDecisionCode(requestBody.getFlowDecisionCode());
+        TbMFlowNewEntity tbMFlowNewEntity = new TbMFlowNewEntity();
+        tbMFlowNewEntity.setFlowCode(flowCode);
+        tbMFlowNewEntity.setFlowDecisionCode(requestBody.getFlowDecisionCode());
+        tbMFlowNewEntity.setFlowName(requestBody.getFlowName());
+        tbMFlowNewEntity.setFlowEffectiveDate(requestBody.getFlowEffectiveDate());
+        tbMFlowNewEntity.setCreateAttribute("SYSTEM");
+        tbMFlowNewEntity.setIsActive(requestBody.getIsActive());
+        this.flowUnit.saveFlow(tbMFlowNewEntity);
+        return Util.createResponse(Constants.ResponseCode.OK, "Add Flow Success", flowCode);
+    }
+
+    public List<FlowListDto> getFlowListByDecisionCode(String flowDecisionCode) {
+        return this.flowUnit.getFlowListByDecisionCode(flowDecisionCode);
     }
 }

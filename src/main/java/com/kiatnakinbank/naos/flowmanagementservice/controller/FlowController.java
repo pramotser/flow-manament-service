@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.FlowDto;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.RequestCreateFlow;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.base.Response;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.FlowListDto;
+import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.ReqFlowDto;
 import com.kiatnakinbank.naos.flowmanagementservice.service.FlowService;
+import com.kiatnakinbank.naos.flowmanagementservice.util.Util;
 
 @RestController
 @RequestMapping("/flow")
@@ -55,4 +58,19 @@ public class FlowController {
             @RequestBody RequestCreateFlow request) {
         return this.flowService.deleteFlow(request);
     }
+
+    /// ----------------------- New -----------------------
+    @PostMapping(value = "/addFlow")
+    public ResponseEntity<Response> addFlow(@RequestHeader Map<String, String> headers,
+            @RequestBody ReqFlowDto request) {
+        return this.flowService.addFlow(request);
+    }
+
+    @PostMapping(value = "/getFlowListByDecisionCode")
+    public ResponseEntity<Response> getFlowListByDecisionCode(@RequestHeader Map<String, String> headers,
+            @RequestBody Map<String, String> requestBody) {
+        List<FlowListDto> flowDtoList = this.flowService.getFlowListByDecisionCode(requestBody.get("flowDecisionCode"));
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(HttpStatus.OK, "Success", flowDtoList));
+    }
+
 }
