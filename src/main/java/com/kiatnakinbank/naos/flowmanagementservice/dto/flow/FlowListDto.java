@@ -1,7 +1,6 @@
-package com.kiatnakinbank.naos.flowmanagementservice.dto;
+package com.kiatnakinbank.naos.flowmanagementservice.dto.flow;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
 
@@ -15,15 +14,16 @@ import lombok.Setter;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
-public class RequestCreateFlow {
-    @NotNull
-    private Long flowId;
-    @NotBlank
+public class FlowListDto {
+    private String flowCode;
     private String flowName;
-    @NotBlank
-    private String resultParam;
-
-    private String decisionFlow;
-    @NotBlank
+    private String flowDecisionCode;
+    private Date flowEffectiveDate;
+    private Date flowExpirationDate;
+    private String flowJson;    
     private ActiveFlag isActive;
+    private Date createDate;
+    private String createUser;
+    private Date updateDate;
+    private String updateUser;
 }

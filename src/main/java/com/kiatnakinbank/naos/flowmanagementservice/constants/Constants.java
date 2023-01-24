@@ -2,15 +2,29 @@ package com.kiatnakinbank.naos.flowmanagementservice.constants;
 
 public class Constants {
     public static final class DropdownType {
-        public static final String FLOW_LIST = "FLOW_LIST";
+        public static final String SUBFLOW_LIST = "SUBFLOW_LIST";
         public static final String RESULT_PARAM_LIST = "RESULT_PARAM_LIST";
         public static final String UNIVERSAL_FIELD_LIST = "UNIVERSAL_FIELD_LIST";
+        public static final String RESULT_DECISION_LIST = "RESULT_DECISION_LIST";
+    }
+
+    public static final class UniversalType {
+        public static final String UNIVERSAL = "UNIVERSAL";
+        public static final String RESULT_DECISION = "RESULT_DECISION";
     }
 
     public static final class HttpMethod {
         public static final String GET = "GET";
         public static final String PUT = "PUT";
         public static final String POST = "POST";
+    }
+
+    public static final class PreFixCode {
+        public static final String DECISION = "DC";
+        public static final String FLOW = "FC";
+        public static final String NODE = "NC";
+        public static final String EDGE = "EC";
+        public static final String PARAM = "PC";
     }
 
     public static final class ResponseCode {

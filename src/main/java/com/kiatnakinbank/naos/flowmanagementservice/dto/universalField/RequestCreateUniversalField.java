@@ -1,4 +1,4 @@
-package com.kiatnakinbank.naos.flowmanagementservice.dto;
+package com.kiatnakinbank.naos.flowmanagementservice.dto.universalField;
 
 import javax.validation.constraints.NotBlank;
 
@@ -16,14 +16,16 @@ import lombok.Setter;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
-public class RequestCreateResultParam {
+public class RequestCreateUniversalField {
     
     @NotBlank
-    private String resultParamCode;
+    private String universalCode;
     @NotBlank
-    private String resultParamName;
+    private String universalName;
     @NotBlank
-    private String resultParamType;
+    private String universalType;
+    @NotBlank
+    private String fieldType;
     @NotBlank
     private ActiveFlag isActive;
 }

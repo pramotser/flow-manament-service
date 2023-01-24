@@ -1,6 +1,7 @@
-package com.kiatnakinbank.naos.flowmanagementservice.dto;
+package com.kiatnakinbank.naos.flowmanagementservice.dto.decision;
 
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
 
@@ -14,14 +15,13 @@ import lombok.Setter;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
-public class ResultParamDto {
-
-    private String resultParamCode;
-    private String resultParamName;
-    private String resultParamType;
+public class ReqCreateDecision {
+    @NotNull
+    private String decisionCode;
+    @NotBlank
+    private String decisionName;
+    @NotBlank
+    private String decisionResult;
+    @NotBlank
     private ActiveFlag isActive;
-    private Date createDate;
-    private String createUser;
-    private Date updateDate;
-    private String updateUser;
 }

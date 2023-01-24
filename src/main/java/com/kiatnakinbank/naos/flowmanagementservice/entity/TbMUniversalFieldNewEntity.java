@@ -18,13 +18,16 @@ import lombok.Setter;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @Entity
-@Table(name = "TB_M_RESULT_PARAM_TEMP")
-public class TbMResultParamEntity extends BaseEntity {
+@Table(name = "TB_M_UNIVERSAL_FIELD_NEW")
+public class TbMUniversalFieldNewEntity extends BaseEntity {
     @Id
-    @Column(name = "RESULT_PARAM_CODE", nullable = false, insertable = true, updatable = true, precision = 0)
-    private String resultParamCode;
-    @Column(name = "RESULT_PARAM_NAME")
-    private String resultParamName;
-    @Column(name = "RESULT_PARAM_TYPE")
-    private String resultParamType;
+    @Column(name = "UNIVERSAL_CODE", nullable = false, insertable = true, updatable = true, precision = 0)
+    private String universalCode;
+    
+    @Column(name = "UNIVERSAL_NAME")
+    private String universalName;
+    @Column(name = "UNIVERSAL_TYPE")
+    private String universalType;
+    @Column(name = "FIELD_TYPE")
+    private String fieldType;
 }
