@@ -22,6 +22,7 @@ import lombok.Setter;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 public class ReqFlowDto {
+    private String flowCode;
 
     @NotNull
     private String flowName;

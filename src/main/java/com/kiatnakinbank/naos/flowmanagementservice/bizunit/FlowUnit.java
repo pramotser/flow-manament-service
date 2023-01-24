@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.FlowListDto;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowNewEntity;
@@ -37,6 +38,7 @@ public class FlowUnit {
         }
         return newFlowCode;
     }
+
     public TbMFlowNewEntity saveFlow(TbMFlowNewEntity tbmFlowEntity) {
         return tbMFlowNewRepository.save(tbmFlowEntity);
     }
@@ -67,10 +69,19 @@ public class FlowUnit {
     }
 
     public boolean checkFlowCodeIsNotNull(String flowCode) {
-        return this.tbMFlowNewRepository.countByFlowCode(flowCode) > 0 ;
+        return this.tbMFlowNewRepository.countByFlowCode(flowCode) > 0;
     }
 
     public TbMFlowNewEntity getTbMFlowNewByFlowCode(String flowCode) {
         return this.tbMFlowNewRepository.findByFlowCode(flowCode).get(0);
     }
+
+    public boolean checkFlowCodeActiveByFlowCode(String flowCode) {
+        return this.tbMFlowNewRepository.findByFlowCodeAndIsActive(flowCode, ActiveFlag.Y).size() > 0;
+    }
+
+    public void deleteFlowByFlowCode(String flowCode) {
+        this.tbMFlowNewRepository.deleteById(flowCode);
+    }
+
 }

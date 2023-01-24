@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowNewEntity;
 
 public interface TbMFlowNewRepository extends JpaRepository<TbMFlowNewEntity, String> {
@@ -17,4 +18,7 @@ public interface TbMFlowNewRepository extends JpaRepository<TbMFlowNewEntity, St
     long countByFlowCode(String decisionCode);
 
     List<TbMFlowNewEntity> findByFlowCode(String flowCode);
+    
+    List<TbMFlowNewEntity> findByFlowCodeAndIsActive(String flowCode, ActiveFlag activeFlag);
+
 }

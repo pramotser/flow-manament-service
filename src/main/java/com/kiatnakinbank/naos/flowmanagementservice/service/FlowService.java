@@ -63,4 +63,35 @@ public class FlowService {
         flowUnit.saveFlow(tbMFlowNewEntity);
         return Util.createResponse(Constants.ResponseCode.OK, "Save Flow Graph Success", new ArrayList<>());
     }
+
+    public ResponseEntity<Response> updateFlow(ReqFlowDto requestBody) {
+        if (!this.flowUnit.checkFlowCodeIsNotNull(requestBody.getFlowCode())) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Flow Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+        if (!this.decisionUnit.checkDecisionCodeIsNotNull(requestBody.getFlowDecisionCode())) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Decision Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+        TbMFlowNewEntity tbMFlowNewEntity = this.flowUnit.getTbMFlowNewByFlowCode(requestBody.getFlowCode());
+        tbMFlowNewEntity.setFlowName(requestBody.getFlowName());
+        tbMFlowNewEntity.setFlowEffectiveDate(requestBody.getFlowEffectiveDate());
+        tbMFlowNewEntity.setUpdateAttribute("SYSTEM");
+        flowUnit.saveFlow(tbMFlowNewEntity);
+        return Util.createResponse(Constants.ResponseCode.OK, "Update Flow Success", new ArrayList<>());
+    }
+
+    public ResponseEntity<Response> deleteFlow(String flowCode) {
+        if (!this.flowUnit.checkFlowCodeIsNotNull(flowCode)) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Flow Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+        if (this.flowUnit.checkFlowCodeActiveByFlowCode(flowCode)) {
+            return Util.createResponse(Constants.ResponseCode.ACCEPTED,
+                    "Cannot delete because the status flow is active.",
+                    new ArrayList<>());
+        }
+        flowUnit.deleteFlowByFlowCode(flowCode);
+        return Util.createResponse(Constants.ResponseCode.OK, "Delete Flow Success.", new ArrayList<>());
+    }
 }
