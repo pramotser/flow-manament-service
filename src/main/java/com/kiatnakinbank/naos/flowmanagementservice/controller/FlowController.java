@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,6 +60,13 @@ public class FlowController {
     public ResponseEntity<Response> deleteFlow(HttpServletRequest request,
             @RequestBody ReqFlowDto requestBody) {
         return this.flowService.deleteFlow(requestBody.getFlowCode());
+    }
+
+    @PostMapping(value = "/activeFlow")
+    public ResponseEntity<Response> activeFlow(HttpServletRequest request,
+            @RequestBody ReqFlowDto requestBody) {
+        LOGGER.info("============ FlowController activeFlow ============");
+        return this.flowService.activeFlow(requestBody);
     }
 
 }

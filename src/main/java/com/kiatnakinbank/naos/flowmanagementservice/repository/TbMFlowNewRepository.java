@@ -15,10 +15,12 @@ public interface TbMFlowNewRepository extends JpaRepository<TbMFlowNewEntity, St
 
     List<TbMFlowNewEntity> findByFlowDecisionCode(String flowDecisionCode);
 
-    long countByFlowCode(String decisionCode);
+    long countByFlowCode(String flowCode);
 
     List<TbMFlowNewEntity> findByFlowCode(String flowCode);
     
     List<TbMFlowNewEntity> findByFlowCodeAndIsActive(String flowCode, ActiveFlag activeFlag);
+
+    long countByFlowName(String flowName);
 
 }

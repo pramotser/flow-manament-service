@@ -34,6 +34,8 @@ public class ReqFlowDto {
     @JsonSerialize(using = JsonDateSerializer.class)
     @NotNull
     private Date flowEffectiveDate;
+    
+    private String flowJson;
 
     @NotBlank
     private ActiveFlag isActive;

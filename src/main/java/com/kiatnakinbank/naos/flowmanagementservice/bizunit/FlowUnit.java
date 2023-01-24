@@ -2,7 +2,10 @@ package com.kiatnakinbank.naos.flowmanagementservice.bizunit;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
+import com.kiatnakinbank.naos.common.util.CommonUtils;
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.FlowListDto;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowNewEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMFlowNewRepository;
+
+import net.bytebuddy.dynamic.TypeResolutionStrategy.Active;
 
 @Service
 public class FlowUnit {
@@ -82,6 +88,55 @@ public class FlowUnit {
 
     public void deleteFlowByFlowCode(String flowCode) {
         this.tbMFlowNewRepository.deleteById(flowCode);
+    }
+
+    public boolean checkGraphFlowIsNotNull(String flowCode) {
+        List<TbMFlowNewEntity> tbMEntity = this.tbMFlowNewRepository.findByFlowCode(flowCode);
+        if (!CommonUtils.isNotNullAndEmpty(tbMEntity)) {
+            return false;
+        }
+        return CommonUtils.isNotBlank(tbMEntity.get(0).getFlowJson());
+    }
+
+    public boolean checkEffectDate(String flowCode, String decisionCode) {
+        Boolean flagEffectDate = true;
+        List<TbMFlowNewEntity> flowAllWithDecisionCode = this.tbMFlowNewRepository.findByFlowDecisionCode(decisionCode);
+        TbMFlowNewEntity tbMFlowNewEntity = this.tbMFlowNewRepository.findByFlowCode(flowCode).get(0);
+        for (TbMFlowNewEntity row : flowAllWithDecisionCode) {
+            // LOGGER.info("IsActive : " + row.getIsActive());
+            // LOGGER.info("getFlowExpirationDate : " + row.getFlowExpirationDate());
+            if (ActiveFlag.Y.equals(row.getIsActive()) && row.getFlowExpirationDate() == null) {
+                LOGGER.info("FLOW CODE : " + row.getFlowCode());
+                LOGGER.info("FLOW_EFFECTIVE_DATE : " + row.getFlowEffectiveDate());
+                LOGGER.info(" EFFECTIVE_DATE want Active : " + tbMFlowNewEntity.getFlowEffectiveDate());
+                int result = tbMFlowNewEntity.getFlowEffectiveDate().compareTo(row.getFlowEffectiveDate());
+                LOGGER.info(" result row FLOW_EFFECTIVE_DATE : " + result);
+                result = tbMFlowNewEntity.getFlowEffectiveDate().compareTo(new Date());
+                LOGGER.info(" result Current date : " + result);
+                if (tbMFlowNewEntity.getFlowEffectiveDate().compareTo(row.getFlowEffectiveDate()) <= 0
+                        || tbMFlowNewEntity.getFlowEffectiveDate().compareTo(new Date()) <= 0) {
+                    flagEffectDate = false;
+                    break;
+                }
+            }
+        }
+        LOGGER.info(" flagEffectDate : " + flagEffectDate);
+        return flagEffectDate;
+    }
+
+    public TbMFlowNewEntity getTbMFlowNewLastActiveByDecisionCode(String flowDecisionCode) {
+        List<TbMFlowNewEntity> flowAllWithDecisionCode = this.tbMFlowNewRepository.findByFlowDecisionCode(flowDecisionCode);
+        TbMFlowNewEntity tbMFlowNewEntity = new TbMFlowNewEntity();
+        for (TbMFlowNewEntity row : flowAllWithDecisionCode) {
+            if (ActiveFlag.Y.equals(row.getIsActive()) && row.getFlowExpirationDate() == null) {
+                tbMFlowNewEntity = row;
+            }
+        }
+        return tbMFlowNewEntity; 
+    }
+
+    public boolean checkFlowNameDuplicate(String flowName) {
+        return this.tbMFlowNewRepository.countByFlowName(flowName) > 0;
     }
 
 }

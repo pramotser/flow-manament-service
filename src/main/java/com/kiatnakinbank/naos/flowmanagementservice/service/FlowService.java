@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.kiatnakinbank.naos.common.framework.enums.ActiveFlag;
 import com.kiatnakinbank.naos.flowmanagementservice.bizunit.DecisionUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.bizunit.FlowUnit;
 import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
@@ -35,6 +36,10 @@ public class FlowService {
             return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Decision Code is Data Not Found.",
                     new ArrayList<>());
         }
+        if(this.flowUnit.checkFlowNameDuplicate(requestBody.getFlowName())){
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Flow Name is Duplicate.",
+            new ArrayList<>());
+        }
         String flowCode = this.flowUnit.generateFlowCodeByDecisionCode(requestBody.getFlowDecisionCode());
         TbMFlowNewEntity tbMFlowNewEntity = new TbMFlowNewEntity();
         tbMFlowNewEntity.setFlowCode(flowCode);
@@ -43,6 +48,7 @@ public class FlowService {
         tbMFlowNewEntity.setFlowEffectiveDate(requestBody.getFlowEffectiveDate());
         tbMFlowNewEntity.setCreateAttribute("SYSTEM");
         tbMFlowNewEntity.setIsActive(requestBody.getIsActive());
+        tbMFlowNewEntity.setFlowJson(requestBody.getFlowJson());
         this.flowUnit.saveFlow(tbMFlowNewEntity);
         return Util.createResponse(Constants.ResponseCode.OK, "Add Flow Success", flowCode);
     }
@@ -93,5 +99,35 @@ public class FlowService {
         }
         flowUnit.deleteFlowByFlowCode(flowCode);
         return Util.createResponse(Constants.ResponseCode.OK, "Delete Flow Success.", new ArrayList<>());
+    }
+
+    public ResponseEntity<Response> activeFlow(ReqFlowDto requestBody) {
+        LOGGER.info("checkGraphFlowIsNotNull" + !this.flowUnit.checkFlowCodeIsNotNull(requestBody.getFlowCode()));
+        if (!this.flowUnit.checkFlowCodeIsNotNull(requestBody.getFlowCode())) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Flow Code is Data Not Found.",
+                    new ArrayList<>());
+        }
+        LOGGER.info(("checkGraphFlowIsNotNull" + !this.flowUnit.checkGraphFlowIsNotNull(requestBody.getFlowCode())));
+        if (!this.flowUnit.checkGraphFlowIsNotNull(requestBody.getFlowCode())) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "This Flow Graph is Not Found.",
+                    new ArrayList<>());
+        }
+        if (!this.flowUnit.checkEffectDate(requestBody.getFlowCode(), requestBody.getFlowDecisionCode())) {
+            return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "This Flow Effective Date is incorrect.",
+                    new ArrayList<>());
+        }
+        TbMFlowNewEntity tbMFlowNewEntity = this.flowUnit.getTbMFlowNewByFlowCode(requestBody.getFlowCode());
+
+        // Chnage exp flow active old to new effect - 1 day
+        TbMFlowNewEntity flowOldActive = this.flowUnit.getTbMFlowNewLastActiveByDecisionCode(requestBody.getFlowDecisionCode());
+        flowOldActive.setUpdateAttribute("SYSTEM");
+        flowOldActive.setFlowExpirationDate(tbMFlowNewEntity.getFlowEffectiveDate());
+        this.flowUnit.saveFlow(flowOldActive);
+
+        // Save new flow active 
+        tbMFlowNewEntity.setIsActive(ActiveFlag.Y);
+        this.flowUnit.saveFlow(tbMFlowNewEntity);
+
+        return Util.createResponse(Constants.ResponseCode.OK, "Active Flow Success.", new ArrayList<>());
     }
 }
