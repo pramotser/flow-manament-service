@@ -36,7 +36,7 @@ public class FlowService {
             return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Decision Code is Data Not Found.",
                     new ArrayList<>());
         }
-        if(this.flowUnit.checkFlowNameDuplicate(requestBody.getFlowName())){
+        if(this.flowUnit.checkFlowNameDuplicate(requestBody.getFlowName(),requestBody.getFlowDecisionCode())){
             return Util.createResponse(Constants.ResponseCode.BAD_REQUEST, "Flow Name is Duplicate.",
             new ArrayList<>());
         }

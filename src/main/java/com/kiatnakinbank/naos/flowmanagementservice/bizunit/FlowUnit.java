@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,6 @@ import com.kiatnakinbank.naos.flowmanagementservice.constants.Constants;
 import com.kiatnakinbank.naos.flowmanagementservice.dto.flow.FlowListDto;
 import com.kiatnakinbank.naos.flowmanagementservice.entity.TbMFlowNewEntity;
 import com.kiatnakinbank.naos.flowmanagementservice.repository.TbMFlowNewRepository;
-
-import net.bytebuddy.dynamic.TypeResolutionStrategy.Active;
 
 @Service
 public class FlowUnit {
@@ -125,18 +121,19 @@ public class FlowUnit {
     }
 
     public TbMFlowNewEntity getTbMFlowNewLastActiveByDecisionCode(String flowDecisionCode) {
-        List<TbMFlowNewEntity> flowAllWithDecisionCode = this.tbMFlowNewRepository.findByFlowDecisionCode(flowDecisionCode);
+        List<TbMFlowNewEntity> flowAllWithDecisionCode = this.tbMFlowNewRepository
+                .findByFlowDecisionCode(flowDecisionCode);
         TbMFlowNewEntity tbMFlowNewEntity = new TbMFlowNewEntity();
         for (TbMFlowNewEntity row : flowAllWithDecisionCode) {
             if (ActiveFlag.Y.equals(row.getIsActive()) && row.getFlowExpirationDate() == null) {
                 tbMFlowNewEntity = row;
             }
         }
-        return tbMFlowNewEntity; 
+        return tbMFlowNewEntity;
     }
 
-    public boolean checkFlowNameDuplicate(String flowName) {
-        return this.tbMFlowNewRepository.countByFlowName(flowName) > 0;
+    public boolean checkFlowNameDuplicate(String flowName, String flowDecisionCode) {
+        return this.tbMFlowNewRepository.countByFlowNameAndFlowDecisionCode(flowName, flowDecisionCode) > 0;
     }
 
 }
